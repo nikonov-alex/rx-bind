@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "outDir": "./",
+    "skipLibCheck": true,
+    "module": "es6",
+    "moduleResolution": "node",
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "target": "es6",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "downlevelIteration": true,
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "baseUrl": "./",
+  },
+  "files": [
+    "./index.ts",
+  ]
+}

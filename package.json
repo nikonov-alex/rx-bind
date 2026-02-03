@@ -1,0 +1,29 @@
+{
+  "name": "@nikonov-alex/rx-bind",
+  "version": "0.0.1",
+  "description": "Rx bind",
+  "main": "index.js",
+  "types": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikonov-alex/rx-bind.git"
+  },
+  "author": "Aleksander Nikonov <nikonov.personal.mail@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nikonov-alex/rx-bind/issues"
+  },
+  "homepage": "https://github.com/nikonov-alex/rx-bind#readme",
+  "devDependencies": {
+    "jsx-dom": "^8.1.6",
+    "rxjs": "^7.8.2",
+    "ts-loader": "^9.4.4",
+    "tslib": "^2.6.2",
+    "typescript": "^5.2.2",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  }
+}
