@@ -6,12 +6,22 @@ type Attributes<Node extends HTMLElement> = Partial<{ [Field in keyof Node]: Obs
 
 type Children = Observable<JSX.Element | JSX.Element[]>;
 
-type Props<Node extends HTMLElement> = Omit<Attributes<Node>, "children"> & {
+type StyleProps = {
+    [K in keyof CSSStyleDeclaration as CSSStyleDeclaration[K] extends string ? K : never]: CSSStyleDeclaration[K];
+};
+
+type Style = Partial<{ [Prop in keyof StyleProps]: Observable<string> }>;
+
+type Dataset = { [k: string]: Observable<string | undefined> };
+
+type Props<Node extends HTMLElement> = Omit<Attributes<Node>, "children" | "style" | "dataset"> & {
     children: Children;
+    style: Style;
+    dataset: Dataset
 }
 
 export const bind = <Node extends HTMLElement>(
-    { children, style, ... atts }: Partial<Props<Node>>
+    { children, style, dataset, ... atts }: Partial<Props<Node>>
 ) =>
     ( node: Node ) => {
         const bindChildren = ( subject: Children ) =>
@@ -25,11 +35,30 @@ export const bind = <Node extends HTMLElement>(
                 }
             } );
 
-        const bindStyle = ( subject: Observable<CSSStyleDeclaration> ) =>
-            subject.subscribe( newValue => {
-                node.style.cssText = "";
-                Object.assign( node.style, newValue );
-            } );
+        const bindDataset = ( dataset: Dataset ) => {
+            for ( let prop in dataset ) {
+                const field = prop;
+                if ( dataset.hasOwnProperty( field ) && undefined !== dataset[field] ) {
+                    dataset[field].subscribe( newValue => {
+                        node.dataset[field] = newValue;
+                    } );
+                }
+            }
+        }
+
+        const bindStyle = ( style: Style ) => {
+            type Defined<P extends keyof Style> = Exclude<Style[P], undefined>;
+
+            let prop: keyof Style;
+            for ( prop in style ) {
+                const field = prop;
+                if ( style.hasOwnProperty( field ) && undefined !== style[field] ) {
+                    (style[field] as Defined<typeof field>).subscribe( newValue => {
+                        node.style[field] = newValue;
+                    } );
+                }
+            }
+        }
 
         const bindAttributes = ( atts: Attributes<Node> ) => {
             type Defined<P extends keyof typeof atts> = Exclude<typeof atts[P], undefined>;
@@ -50,6 +79,9 @@ export const bind = <Node extends HTMLElement>(
         }
         if ( undefined !== style ) {
             bindStyle( style );
+        }
+        if ( undefined !== dataset ) {
+            bindDataset( dataset );
         }
         bindAttributes( atts as Attributes<Node> );
     };
