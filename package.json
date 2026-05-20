@@ -1,6 +1,6 @@
 {
   "name": "@nikonov-alex/rx-bind",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Rx bind",
   "main": "index.js",
   "types": "index.ts",

@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 
 type Attributes<Node extends HTMLElement> = Partial<{ [Field in keyof Node]: Observable<Node[Field]> }>;
 
-type Children = Observable<JSX.Element | JSX.Element[]>;
+type Children = Observable<JSX.Element | JSX.Element[] | null>;
 
 type StyleProps = {
     [K in keyof CSSStyleDeclaration as CSSStyleDeclaration[K] extends string ? K : never]: CSSStyleDeclaration[K];
@@ -27,11 +27,13 @@ export const bind = <Node extends HTMLElement>(
         const bindChildren = ( subject: Children ) =>
             subject.subscribe( newValue => {
                 node.innerHTML = "";
-                if ( Array.isArray( newValue ) ) {
-                    node.append( ... newValue );
-                }
-                else {
-                    node.appendChild( newValue );
+                if ( newValue ) {
+                    if ( Array.isArray( newValue ) ) {
+                        node.append( ... newValue );
+                    }
+                    else {
+                        node.appendChild( newValue );
+                    }
                 }
             } );
 
